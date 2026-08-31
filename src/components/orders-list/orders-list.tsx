@@ -1,12 +1,26 @@
 import { FC, memo } from 'react';
+import { OrderCard } from '@components';
+import { TOrder } from '@utils-types';
 
-import { OrdersListProps } from './type';
-import { OrdersListUI } from '@ui';
+type OrdersListProps = {
+  orders: TOrder[];
+  onOrderClick?: (orderNumber: number) => void;
+};
 
-export const OrdersList: FC<OrdersListProps> = memo(({ orders }) => {
+export const OrdersList: FC<OrdersListProps> = memo(({ orders, onOrderClick }) => {
   const orderByDate = [...orders].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   );
 
-  return <OrdersListUI orderByDate={orderByDate} />;
+  return (
+    <div>
+      {orderByDate.map((order) => (
+        <OrderCard 
+          key={order._id} 
+          order={order} 
+          onClick={() => onOrderClick?.(order.number)} 
+        />
+      ))}
+    </div>
+  );
 });

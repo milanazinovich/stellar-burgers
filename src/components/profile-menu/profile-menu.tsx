@@ -16,9 +16,6 @@ export const ProfileMenu: FC = () => {
   };
 
   return (
-    <ProfileMenuUI
-      pathname={location.pathname}
-      handleLogout={handleLogout}
-    />
+    <ProfileMenuUI pathname={location.pathname} handleLogout={handleLogout} />
   );
 };

@@ -13,7 +13,5 @@ export const IngredientDetails = () => {
     return null;
   }
 
-  return (
-    <IngredientDetailsUI ingredientData={ingredient} />
-  );
+  return <IngredientDetailsUI ingredientData={ingredient} />;
 };

@@ -14,22 +14,18 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
     <nav className={`${styles.menu} p-4`}>
       <div className={styles.menu_part_left}>
         <NavLink
-          to="/"
+          to='/'
           className={({ isActive }) =>
-            `text text_type_main-default ml-2 mr-10 ${
-              isActive ? styles.link_active : styles.link
-            }`
+            `text text_type_main-default ml-2 mr-10 ${styles.link} ${isActive ? styles.link_active : ''}`
           }
         >
           <BurgerIcon type={'primary'} />
           <span className='ml-2'>Конструктор</span>
         </NavLink>
         <NavLink
-          to="/feed"
+          to='/feed'
           className={({ isActive }) =>
-            `text text_type_main-default ml-2 ${
-              isActive ? styles.link_active : styles.link
-            }`
+            `text text_type_main-default ml-2 ${styles.link} ${isActive ? styles.link_active : ''}`
           }
         >
           <ListIcon type={'primary'} />
@@ -37,17 +33,15 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         </NavLink>
       </div>
       <div className={styles.logo}>
-        <Link to="/">
+        <Link to='/'>
           <Logo className='' />
         </Link>
       </div>
       <div className={styles.link_position_last}>
         <NavLink
-          to="/profile"
+          to='/profile'
           className={({ isActive }) =>
-            `text text_type_main-default ml-2 ${
-              isActive ? styles.link_active : styles.link
-            }`
+            `text text_type_main-default ml-2 ${styles.link} ${isActive ? styles.link_active : ''}`
           }
         >
           <ProfileIcon type={'primary'} />

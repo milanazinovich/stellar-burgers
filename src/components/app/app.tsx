@@ -30,11 +30,10 @@ const App = () => {
     dispatch(fetchUser());
   }, [dispatch]);
 
-  // Получаем "фон" (предыдущую страницу) из state, чтобы рендерить её под модалкой
   const background = location.state && location.state.background;
 
   const handleCloseModal = () => {
-    navigate(-1); // Возвращаемся на шаг назад (закрываем модалку)
+    navigate(-1);
   };
 
   useEffect(() => {
@@ -45,17 +44,13 @@ const App = () => {
     <div className={styles.app}>
       <AppHeader />
 
-      {/* 
-        Если есть background, рендерим фоновую страницу. 
-        Иначе рендерим обычную страницу по текущему location.
-      */}
       <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
         <Route
           path='/login'
           element={
-            <ProtectedRoute onlyUnAuth={true}>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -63,7 +58,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute onlyUnAuth={true}>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -71,7 +66,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute onlyUnAuth={true}>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -79,7 +74,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute onlyUnAuth={true}>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -100,43 +95,59 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route path='*' element={<NotFound404 />} />
       </Routes>
 
-      {/* 
-        Маршруты для модальных окон. 
-        Рендерятся ТОЛЬКО если есть background (то есть мы перешли по ссылке, а не ввели URL вручную).
-      */}
-      {background && (
-        <Routes>
-          <Route
-            path='/ingredients/:id'
-            element={
+      <Routes>
+        <Route path='/' element={null} />
+        <Route path='/feed' element={null} />
+        <Route path='/login' element={null} />
+        <Route path='/register' element={null} />
+        <Route path='/forgot-password' element={null} />
+        <Route path='/reset-password' element={null} />
+        <Route path='/profile' element={null} />
+        <Route path='/profile/orders' element={null} />
+
+        <Route
+          path='/ingredients/:id'
+          element={
+            background ? (
               <Modal title='Детали ингредиента' onClose={handleCloseModal}>
                 <IngredientDetails />
               </Modal>
-            }
-          />
-          <Route
-            path='/feed/:number'
-            element={
+            ) : (
+              <IngredientDetails />
+            )
+          }
+        />
+        <Route
+          path='/feed/:number'
+          element={
+            background ? (
               <Modal title='Детали заказа' onClose={handleCloseModal}>
                 <OrderInfo />
               </Modal>
-            }
-          />
-          <Route
-            path='/profile/orders/:number'
-            element={
-              <ProtectedRoute>
+            ) : (
+              <OrderInfo />
+            )
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              {background ? (
                 <Modal title='Детали заказа' onClose={handleCloseModal}>
                   <OrderInfo />
                 </Modal>
-              </ProtectedRoute>
-            }
-          />
-        </Routes>
-      )}
+              ) : (
+                <OrderInfo />
+              )}
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path='*' element={<NotFound404 />} />
+      </Routes>
     </div>
   );
 };

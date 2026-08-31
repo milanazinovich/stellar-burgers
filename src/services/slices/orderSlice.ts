@@ -32,7 +32,7 @@ export const getOrderByNumber = createAsyncThunk(
   async (number: number) => {
     const response = await getOrderByNumberApi(number);
     if (!response.success) return Promise.reject(response);
-    return response.orders[0]; 
+    return response.orders[0];
   }
 );
 

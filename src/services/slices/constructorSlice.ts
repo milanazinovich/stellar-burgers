@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, createAction, PayloadAction } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 import { TIngredient, TConstructorIngredient } from '@utils-types';
 
 type TConstructorState = {
@@ -11,20 +12,20 @@ const initialState: TConstructorState = {
   ingredients: []
 };
 
+export const addIngredient = createAction(
+  'constructor/addIngredient',
+  (ingredient: TIngredient) => ({
+    payload: {
+      ...ingredient,
+      id: uuidv4()
+    }
+  })
+);
+
 export const constructorSlice = createSlice({
   name: 'constructor',
   initialState,
   reducers: {
-    addIngredient: (state, action: PayloadAction<TIngredient>) => {
-      if (action.payload.type === 'bun') {
-        state.bun = action.payload;
-      } else {
-        state.ingredients.push({
-          ...action.payload,
-          id: `${action.payload._id}-${Date.now()}`
-        });
-      }
-    },
     removeIngredient: (
       state,
       action: PayloadAction<TConstructorIngredient>
@@ -39,6 +40,7 @@ export const constructorSlice = createSlice({
     ) => {
       const { index, direction } = action.payload;
       const newIngredients = [...state.ingredients];
+
       if (direction === 'up' && index > 0) {
         const temp = newIngredients[index - 1];
         newIngredients[index - 1] = newIngredients[index];
@@ -48,19 +50,28 @@ export const constructorSlice = createSlice({
         newIngredients[index + 1] = newIngredients[index];
         newIngredients[index] = temp;
       }
+
       state.ingredients = newIngredients;
     },
     clearConstructor: (state) => {
       state.bun = null;
       state.ingredients = [];
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      addIngredient,
+      (state, action: PayloadAction<TConstructorIngredient>) => {
+        if (action.payload.type === 'bun') {
+          state.bun = action.payload;
+        } else {
+          state.ingredients.push(action.payload);
+        }
+      }
+    );
   }
 });
 
-export const {
-  addIngredient,
-  removeIngredient,
-  moveIngredient,
-  clearConstructor
-} = constructorSlice.actions;
+export const { removeIngredient, moveIngredient, clearConstructor } =
+  constructorSlice.actions;
 export default constructorSlice.reducer;

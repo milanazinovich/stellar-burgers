@@ -3,18 +3,20 @@ import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from '../../services/store';
 import { Preloader } from '../ui/preloader';
 import { OrderInfoUI } from '../ui/order-info';
+import { NotFound404 } from '@pages';
 import { TIngredient, TOrder } from '@utils-types';
-
 import { getOrderByNumber } from '../../services/slices/orderSlice';
 
 export const OrderInfo: FC = () => {
   const dispatch = useDispatch();
-  
+
   const { number } = useParams<{ number: string }>();
-  
-  const orderData: TOrder | null = useSelector((state) => state.order.orderData);
+
+  const orderData: TOrder | null = useSelector(
+    (state) => state.order.orderData
+  );
   const isLoading = useSelector((state) => state.order.isLoading);
-  
+
   const ingredients: TIngredient[] = useSelector(
     (state) => state.ingredients?.ingredients || []
   );
@@ -26,7 +28,7 @@ export const OrderInfo: FC = () => {
   }, [dispatch, number]);
 
   const orderInfo = useMemo(() => {
-    if (!orderData || !ingredients.length) return null;
+    if (!orderData) return null;
 
     const date = new Date(orderData.createdAt);
 
@@ -65,8 +67,12 @@ export const OrderInfo: FC = () => {
     };
   }, [orderData, ingredients]);
 
-  if (isLoading || !orderInfo) {
+  if (isLoading) {
     return <Preloader />;
+  }
+
+  if (!orderData || !orderInfo) {
+    return <NotFound404 />;
   }
 
   return <OrderInfoUI orderInfo={orderInfo} />;

@@ -7,20 +7,23 @@ type OrdersListProps = {
   onOrderClick?: (orderNumber: number) => void;
 };
 
-export const OrdersList: FC<OrdersListProps> = memo(({ orders, onOrderClick }) => {
-  const orderByDate = [...orders].sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+export const OrdersList: FC<OrdersListProps> = memo(
+  ({ orders, onOrderClick }) => {
+    const orderByDate = [...orders].sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
 
-  return (
-    <div>
-      {orderByDate.map((order) => (
-        <OrderCard 
-          key={order._id} 
-          order={order} 
-          onClick={() => onOrderClick?.(order.number)} 
-        />
-      ))}
-    </div>
-  );
-});
+    return (
+      <div>
+        {orderByDate.map((order) => (
+          <OrderCard
+            key={order._id}
+            order={order}
+            onClick={() => onOrderClick?.(order.number)}
+          />
+        ))}
+      </div>
+    );
+  }
+);

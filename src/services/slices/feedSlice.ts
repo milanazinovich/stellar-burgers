@@ -28,7 +28,14 @@ export const feedSlice = createSlice({
   name: 'feed',
   initialState,
   reducers: {
-    setFeedData: (state, action: PayloadAction<{ orders: TOrder[]; total: number; totalToday: number }>) => {
+    setFeedData: (
+      state,
+      action: PayloadAction<{
+        orders: TOrder[];
+        total: number;
+        totalToday: number;
+      }>
+    ) => {
       state.orders = action.payload.orders;
       state.total = action.payload.total;
       state.totalToday = action.payload.totalToday;

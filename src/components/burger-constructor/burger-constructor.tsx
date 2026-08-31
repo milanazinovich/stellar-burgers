@@ -17,10 +17,10 @@ export const BurgerConstructor: FC = () => {
   const user = useSelector((state) => state.user.user);
   const isAuthChecked = useSelector((state) => state.user.isAuthChecked);
 
-  const onOrderClick = () => {
+  const onOrderClick = async () => {
     if (!constructorItems.bun || orderRequest) return;
 
-    if (!isAuthChecked) return; 
+    if (!isAuthChecked) return;
 
     if (!user) {
       navigate('/login', { state: { from: location } });
@@ -33,12 +33,15 @@ export const BurgerConstructor: FC = () => {
       constructorItems.bun._id
     ];
 
-    dispatch(placeOrder(ingredientIds));
+    const resultAction = await dispatch(placeOrder(ingredientIds));
+
+    if (placeOrder.fulfilled.match(resultAction)) {
+      dispatch(clearConstructor());
+    }
   };
 
   const closeOrderModalHandler = () => {
     dispatch(closeOrderModal());
-    dispatch(clearConstructor());
   };
 
   const price = useMemo(

@@ -8,7 +8,7 @@ export const Login: FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   const user = useSelector((state) => state.user.user);
   const error = useSelector((state) => state.user.error);
 
